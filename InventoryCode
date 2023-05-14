@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_PRODUCTS 100               // maximum number of products to be stored
+
+
+struct product {                      //struct for product
+    char name[50];
+    double price;
+    int stock;
+};
+
+
+struct product inventory[MAX_PRODUCTS]; //array to store the products
+
+int num_products = 0;                   //current number of products in inventory
+
+
+void add_product() {
+    if (num_products < MAX_PRODUCTS) {
+        printf("Enter the name of the product: ");
+        scanf("%s", inventory[num_products].name);
+        printf("Enter the price of the product in INR : ");
+        scanf("%lf", &inventory[num_products].price);
+        printf("Enter the stock of the product: ");
+        scanf("%d", &inventory[num_products].stock);
+        num_products++;
+        printf("The product has been added to the inventory.\n");
+    } else {
+        printf("The inventory is full.\n");
+    }
+}
+
+void purchase_product() {
+    char product_name[50];
+    int quantity;
+    printf("Enter the name of the product: ");
+    scanf("%s", product_name);
+    printf("Enter the quantity of the product: ");
+    scanf("%d", &quantity);
+    int i;
+    for (i = 0; i < num_products; i++) {
+        if (strcmp(product_name, inventory[i].name) == 0) {
+            if (inventory[i].stock >= quantity) {
+                double total_price = inventory[i].price * quantity;
+                inventory[i].stock -= quantity;
+                printf("The purchase was successful. Total cost: $%.2lf\n", total_price);
+            } else {
+                printf("Insufficient stock for the product.\n");
+            }
+            return;
+        }
+    }
+    printf("The product is not in the inventory.\n");
+}
+
+
+void generate_inventory_report() {
+    printf("Current Inventory Report:\n");
+    printf("Name\t\tPrice\tStock\n");
+    int i;
+    for (i = 0; i < num_products; i++) {
+        printf("%s\t\t%.2lf\t%d\n", inventory[i].name, inventory[i].price, inventory[i].stock);
+    }
+}
+
+
+void generate_sales_report() {
+    double total_sales = 0;
+    int i;
+    for (i = 0; i < num_products; i++) {
+        total_sales += inventory[i].price * (inventory[i].stock - inventory[i].stock);
+    }
+    printf("Total Sales Report: $%.2lf\n", total_sales);
+}
+
+
+int main() {
+    int choice;
+    while (1) {
+        printf("1. Add a new product\n");
+        printf("2. Purchase a product\n");
+        printf("3. Generate an inventory report\n");
+        printf("4. Generate a sales report\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                add_product();
+                break;
+            case 2:
+                purchase_product();
+                break;
+            case 3:
+                generate_inventory_report();
+                break;
+            case 4:
+                generate_sales_report();
+                break;
+            case 5:
+                return 0;
+                }
+            }
+        }
+     
